@@ -2,7 +2,25 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Environment setup
+
+Create your local environmant file:
+```
+cp .env.example .env.local
+```
+
+Then fill in your values inside `.env.local`
+```
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+### 3. Run the development server:
 
 ```bash
 npm run dev
