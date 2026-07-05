@@ -35,7 +35,7 @@ export interface CountryScores {
   budget: number;
   interest: number;
   travelEase: number;
-  weather: number;
+  experience: number;
 }
 
 export interface InterestMatch {

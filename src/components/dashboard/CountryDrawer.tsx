@@ -18,7 +18,7 @@ export function CountryDrawer({ country, isOpen, onClose }: CountryDrawerProps) 
     { label: "Budget", value: country.scores.budget },
     { label: "Interests", value: country.scores.interest },
     { label: "Travel Ease", value: country.scores.travelEase },
-    { label: "Weather", value: country.scores.weather },
+    { label: "Experience", value: country.scores.experience },
   ];
 
   return (

@@ -1,4 +1,10 @@
 import { countryProfiles } from "@/lib/server/mockData";
+import {
+  computeBudgetScore,
+  computeInterestScore,
+  computeOverallScore,
+  computeTravelEase,
+} from "@/lib/server/scoring";
 import type {
   CountryResult,
   Interest,
@@ -9,53 +15,6 @@ import type {
 } from "@/types/travel";
 
 export type { RecommendRequest, RecommendResponse };
-
-function clampScore(score: number): number {
-  return Math.max(0, Math.min(100, Math.round(score)));
-}
-
-function computeBudgetScore(estimatedCost: number, budget: number): number {
-  const ratio = estimatedCost / budget;
-
-  if (ratio <= 0.75) return 95;
-  if (ratio <= 0.9) return 88;
-  if (ratio <= 1.0) return 80;
-  if (ratio <= 1.15) return 65;
-  return 45;
-}
-
-function computeInterestScore(
-  interestMatch: InterestMatch[],
-  selectedInterests: Interest[]
-): number {
-  if (selectedInterests.length === 0) {
-    return 0;
-  }
-
-  const scores = interestMatch
-    .filter((match) => selectedInterests.includes(match.interest))
-    .map((match) => match.score);
-
-  if (scores.length === 0) {
-    return 50;
-  }
-
-  return Math.round(
-    scores.reduce((total, score) => total + score, 0) / scores.length
-  );
-}
-
-function adjustTravelEase(baseScore: number, duration: number): number {
-  if (duration <= 7) {
-    return clampScore(baseScore - 5);
-  }
-
-  if (duration >= 14) {
-    return clampScore(baseScore + 3);
-  }
-
-  return baseScore;
-}
 
 function filterByRegion(
   profiles: typeof countryProfiles,
@@ -86,14 +45,12 @@ function scoreCountry(
     profile.interestMatch,
     preferences.interests
   );
-  const travelEase = adjustTravelEase(
-    profile.baseTravelEase,
-    preferences.duration
+  const travelEase = computeTravelEase(
+    profile.visaScore,
+    profile.infrastructureScore
   );
-  const weather = profile.baseExperience;
-  const overall = clampScore(
-    (budget + interest + travelEase + weather) / 4
-  );
+  const experience = profile.experienceScore;
+  const overall = computeOverallScore(budget, interest, travelEase, experience);
 
   return {
     country: profile.country,
@@ -103,7 +60,7 @@ function scoreCountry(
       budget,
       interest,
       travelEase,
-      weather,
+      experience,
     },
     summary: profile.summary,
     estimatedCost: profile.estimatedCost,

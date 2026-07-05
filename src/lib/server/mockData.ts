@@ -6,8 +6,9 @@ export interface CountryProfile {
   regions: Region[];
   estimatedCost: number;
   summary: string;
-  baseTravelEase: number;
-  baseExperience: number;
+  visaScore: number;
+  infrastructureScore: number;
+  experienceScore: number;
   interestMatch: InterestMatch[];
 }
 
@@ -19,8 +20,9 @@ export const countryProfiles: CountryProfile[] = [
     estimatedCost: 1650,
     summary:
       "Georgia is ideal for budget travelers who prioritize hiking and culture. Strong value for short trips.",
-    baseTravelEase: 85,
-    baseExperience: 78,
+    visaScore: 88,
+    infrastructureScore: 80,
+    experienceScore: 78,
     interestMatch: [
       { interest: "hiking", score: 95 },
       { interest: "food", score: 82 },
@@ -43,8 +45,9 @@ export const countryProfiles: CountryProfile[] = [
     estimatedCost: 1780,
     summary:
       "Turkey blends rich history with affordable dining and coastal escapes. Great for mixed interest trips.",
-    baseTravelEase: 82,
-    baseExperience: 80,
+    visaScore: 80,
+    infrastructureScore: 85,
+    experienceScore: 80,
     interestMatch: [
       { interest: "food", score: 97 },
       { interest: "culture", score: 88 },
@@ -67,8 +70,9 @@ export const countryProfiles: CountryProfile[] = [
     estimatedCost: 2450,
     summary:
       "Portugal excels in food, culture, and coastal scenery. Higher cost but excellent travel infrastructure.",
-    baseTravelEase: 90,
-    baseExperience: 86,
+    visaScore: 92,
+    infrastructureScore: 87,
+    experienceScore: 86,
     interestMatch: [
       { interest: "beaches", score: 95 },
       { interest: "culture", score: 92 },
@@ -91,8 +95,9 @@ export const countryProfiles: CountryProfile[] = [
     estimatedCost: 1420,
     summary:
       "Vietnam delivers exceptional value for food and nature lovers. Longer flights but low daily costs.",
-    baseTravelEase: 70,
-    baseExperience: 75,
+    visaScore: 65,
+    infrastructureScore: 78,
+    experienceScore: 75,
     interestMatch: [
       { interest: "food", score: 94 },
       { interest: "nature", score: 90 },
