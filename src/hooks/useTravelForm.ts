@@ -2,50 +2,108 @@
 
 import { useCallback, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
+import { setStoredPreferences } from "@/lib/recommendCache";
+import { safeSessionStorageGet } from "@/lib/safeSessionStorage";
 import { DEFAULT_PREFERENCES, MAX_SELECTED_INTERESTS, STORAGE_KEY } from "@/lib/constants";
 import type { Interest, Region, TravelPreferences, TravelStyle } from "@/types/travel";
 
-function getServerPreferences(): TravelPreferences {
-  return DEFAULT_PREFERENCES;
+export interface PreferencesState {
+  isHydrated: boolean;
+  preferences: TravelPreferences;
+  hasStored: boolean;
+  hasValidSelections: boolean;
 }
 
-let cachedRaw: string | null | undefined;
-let cachedPreferences: TravelPreferences = DEFAULT_PREFERENCES;
+const SERVER_PREFERENCES_STATE: PreferencesState = {
+  isHydrated: false,
+  preferences: DEFAULT_PREFERENCES,
+  hasStored: false,
+  hasValidSelections: false,
+};
 
-function getClientPreferences(): TravelPreferences {
-  const raw = sessionStorage.getItem(STORAGE_KEY);
+let cachedRaw: string | null | undefined;
+let cachedState: PreferencesState = SERVER_PREFERENCES_STATE;
+
+function readClientPreferencesState(): PreferencesState {
+  const raw = safeSessionStorageGet(STORAGE_KEY);
 
   if (raw === cachedRaw) {
-    return cachedPreferences;
+    return cachedState;
   }
 
   cachedRaw = raw;
 
   if (!raw) {
-    cachedPreferences = DEFAULT_PREFERENCES;
-    return cachedPreferences;
+    cachedState = {
+      isHydrated: true,
+      preferences: DEFAULT_PREFERENCES,
+      hasStored: false,
+      hasValidSelections: false,
+    };
+    return cachedState;
   }
 
   try {
-    cachedPreferences = JSON.parse(raw) as TravelPreferences;
+    const preferences = JSON.parse(raw) as TravelPreferences;
+    cachedState = {
+      isHydrated: true,
+      preferences,
+      hasStored: true,
+      hasValidSelections: preferences.interests.length > 0,
+    };
   } catch {
-    cachedPreferences = DEFAULT_PREFERENCES;
+    cachedState = {
+      isHydrated: true,
+      preferences: DEFAULT_PREFERENCES,
+      hasStored: false,
+      hasValidSelections: false,
+    };
   }
 
-  return cachedPreferences;
+  return cachedState;
+}
+
+const preferenceListeners = new Set<() => void>();
+
+export function invalidatePreferencesCache(): void {
+  cachedRaw = undefined;
+  preferenceListeners.forEach((listener) => listener());
 }
 
 function subscribeToPreferences(onStoreChange: () => void) {
-  window.addEventListener("storage", onStoreChange);
-  return () => window.removeEventListener("storage", onStoreChange);
+  preferenceListeners.add(onStoreChange);
+
+  const handleChange = () => {
+    invalidatePreferencesCache();
+    onStoreChange();
+  };
+
+  window.addEventListener("storage", handleChange);
+  return () => {
+    preferenceListeners.delete(onStoreChange);
+    window.removeEventListener("storage", handleChange);
+  };
+}
+
+export function usePreferencesState(): PreferencesState {
+  return useSyncExternalStore(
+    subscribeToPreferences,
+    readClientPreferencesState,
+    () => SERVER_PREFERENCES_STATE
+  );
 }
 
 export function useStoredPreferences(): TravelPreferences {
-  return useSyncExternalStore(
-    subscribeToPreferences,
-    getClientPreferences,
-    getServerPreferences
-  );
+  return usePreferencesState().preferences;
+}
+
+export function useHasStoredPreferences(): boolean {
+  return usePreferencesState().hasStored;
+}
+
+export function useHasValidSelections(): boolean {
+  const { isHydrated, hasValidSelections } = usePreferencesState();
+  return isHydrated && hasValidSelections;
 }
 
 export function useTravelForm() {
@@ -53,6 +111,8 @@ export function useTravelForm() {
   const [preferences, setPreferences] = useState<TravelPreferences>(
     DEFAULT_PREFERENCES
   );
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const toggleInterest = useCallback((interest: Interest) => {
     setPreferences((prev) => {
@@ -92,13 +152,22 @@ export function useTravelForm() {
   }, []);
 
   const submit = useCallback(() => {
-    if (preferences.interests.length === 0) {
+    if (preferences.interests.length === 0 || isNavigating) {
       return;
     }
 
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(preferences));
+    if (!setStoredPreferences(preferences)) {
+      setSubmitError(
+        "Could not save your preferences. Check browser storage settings."
+      );
+      return;
+    }
+
+    invalidatePreferencesCache();
+    setSubmitError(null);
+    setIsNavigating(true);
     router.push("/results");
-  }, [preferences, router]);
+  }, [preferences, router, isNavigating]);
 
   return {
     preferences,
@@ -108,5 +177,7 @@ export function useTravelForm() {
     setTravelStyle,
     setRegion,
     submit,
+    isNavigating,
+    submitError,
   };
 }

@@ -5,15 +5,15 @@ import { useRouter } from "next/navigation";
 import { ScoreChart } from "@/components/charts/ScoreChart";
 import { CountryDrawer } from "@/components/dashboard/CountryDrawer";
 import { CountrySelector } from "@/components/dashboard/CountrySelector";
+import { DashboardEmptyState } from "@/components/dashboard/DashboardEmptyState";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardSkeleton } from "@/components/dashboard/DashboardSkeleton";
 import { InterestMatchBreakdown } from "@/components/dashboard/InterestMatchBreakdown";
 import { AppShell } from "@/components/layout/AppShell";
 import { SectionCard } from "@/components/layout/SectionCard";
 import { TwoColumnLayout } from "@/components/layout/TwoColumnLayout";
-import { getTopInsight, mockCountryResults } from "@/lib/mockData";
-import { useSimulatedLoad } from "@/hooks/useSimulatedLoad";
-import { useStoredPreferences } from "@/hooks/useTravelForm";
+import { useRecommendations } from "@/hooks/useRecommendations";
+import { usePreferencesState } from "@/hooks/useTravelForm";
 
 const METRIC_CHARTS = [
   { metric: "budget" as const, title: "Budget Fit vs User Budget" },
@@ -24,13 +24,15 @@ const METRIC_CHARTS = [
 
 export function DashboardLayout() {
   const router = useRouter();
-  const isLoading = useSimulatedLoad();
-  const preferences = useStoredPreferences();
+  const { isHydrated, preferences, hasStored, hasValidSelections } =
+    usePreferencesState();
+  const { results, insight, isLoading, error } = useRecommendations();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const results = mockCountryResults;
-  const insight = getTopInsight(results);
+  const showEmptyState = isHydrated && !hasValidSelections;
+  const isEmptySidebar = !hasStored;
+
   const selectedCountry =
     selectedIndex !== null ? results[selectedIndex] : null;
 
@@ -48,8 +50,27 @@ export function DashboardLayout() {
       title="Your Travel Matches Dashboard"
       subtitle="Compare destinations across budget, interests, and travel ease"
     >
-      {isLoading ? (
+      {!isHydrated ? (
         <DashboardSkeleton />
+      ) : showEmptyState ? (
+        <TwoColumnLayout
+          sidebar={
+            <DashboardSidebar
+              preferences={preferences}
+              insight=""
+              isEmpty={isEmptySidebar}
+              onRerun={handleRerun}
+            />
+          }
+        >
+          <DashboardEmptyState />
+        </TwoColumnLayout>
+      ) : isLoading ? (
+        <DashboardSkeleton />
+      ) : error ? (
+        <SectionCard>
+          <p className="text-sm text-red-600">{error}</p>
+        </SectionCard>
       ) : (
         <>
           <SectionCard title="Selected Countries" className="mb-8">
@@ -65,6 +86,7 @@ export function DashboardLayout() {
               <DashboardSidebar
                 preferences={preferences}
                 insight={insight}
+                isEmpty={false}
                 onRerun={handleRerun}
               />
             }

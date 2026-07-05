@@ -1,6 +1,8 @@
 import type { Interest, Region, TravelPreferences, TravelStyle } from "@/types/travel";
 
 export const STORAGE_KEY = "travel-ai-preferences";
+export const RESULTS_STORAGE_KEY = "travel-ai-results";
+export const RESULTS_HASH_KEY = "travel-ai-results-hash";
 
 export const DEFAULT_PREFERENCES: TravelPreferences = {
   interests: [],
@@ -49,12 +51,6 @@ export const DURATION_MIN = 3;
 export const DURATION_MAX = 30;
 
 export const MAX_SELECTED_INTERESTS = 5;
-
-/** Simulated loading delay on results page until BE is ready. */
-export const RESULTS_LOADING_DELAY_MS = 2000;
-
-/** Fixed interests shown in the results breakdown (mock data only). */
-export const BREAKDOWN_INTERESTS: Interest[] = ["hiking", "food", "culture"];
 
 export const PRIMARY_COLOR = "#2563eb";
 export const SCORE_GOOD = "#16a34a";

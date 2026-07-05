@@ -52,6 +52,18 @@ export interface CountryResult {
   interestMatch: InterestMatch[];
 }
 
+export interface RecommendRequest {
+  interests: Interest[];
+  budget: number;
+  duration: number;
+  region: Region;
+}
+
+export interface RecommendResponse {
+  results: CountryResult[];
+  insight: string;
+}
+
 export interface ScoreChartData {
   labels: string[];
   values: number[];
