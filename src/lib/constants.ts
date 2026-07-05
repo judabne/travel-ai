@@ -22,9 +22,10 @@ export const INTERESTS: { id: Interest; label: string }[] = [
   { id: "photography", label: "Photography" },
   { id: "wildlife", label: "Wildlife" },
   { id: "history", label: "History" },
-  { id: "adventure", label: "Adventure" },
   { id: "wellness", label: "Wellness" },
   { id: "shopping", label: "Shopping" },
+  { id: "sports", label: "Sports" },
+  { id: "cars", label: "Cars" },
 ];
 
 export const TRAVEL_STYLES: { id: TravelStyle; label: string }[] = [

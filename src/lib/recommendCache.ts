@@ -16,8 +16,48 @@ export function getRecommendRequestKey(
     interests: [...preferences.interests].sort(),
     budget: preferences.budget,
     duration: preferences.duration,
+    travelStyle: preferences.travelStyle,
     region: preferences.region,
   });
+}
+
+export function getStoredPreferences(): TravelPreferences | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const raw = safeSessionStorageGet(STORAGE_KEY);
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(raw) as TravelPreferences;
+  } catch {
+    return null;
+  }
+}
+
+export function arePreferencesEqual(
+  left: TravelPreferences,
+  right: TravelPreferences
+): boolean {
+  if (
+    left.budget !== right.budget ||
+    left.duration !== right.duration ||
+    left.travelStyle !== right.travelStyle ||
+    left.region !== right.region ||
+    left.interests.length !== right.interests.length
+  ) {
+    return false;
+  }
+
+  const leftInterests = [...left.interests].sort();
+  const rightInterests = [...right.interests].sort();
+
+  return leftInterests.every(
+    (interest, index) => interest === rightInterests[index]
+  );
 }
 
 export function getCachedRecommendations(

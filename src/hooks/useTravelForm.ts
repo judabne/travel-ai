@@ -2,7 +2,11 @@
 
 import { useCallback, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
-import { setStoredPreferences } from "@/lib/recommendCache";
+import {
+  arePreferencesEqual,
+  getStoredPreferences,
+  setStoredPreferences,
+} from "@/lib/recommendCache";
 import { safeSessionStorageGet } from "@/lib/safeSessionStorage";
 import { DEFAULT_PREFERENCES, MAX_SELECTED_INTERESTS, STORAGE_KEY } from "@/lib/constants";
 import type { Interest, Region, TravelPreferences, TravelStyle } from "@/types/travel";
@@ -106,11 +110,9 @@ export function useHasValidSelections(): boolean {
   return isHydrated && hasValidSelections;
 }
 
-export function useTravelForm() {
+export function useTravelForm(initialPreferences: TravelPreferences) {
   const router = useRouter();
-  const [preferences, setPreferences] = useState<TravelPreferences>(
-    DEFAULT_PREFERENCES
-  );
+  const [preferences, setPreferences] = useState(initialPreferences);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isNavigating, setIsNavigating] = useState(false);
 
@@ -156,7 +158,12 @@ export function useTravelForm() {
       return;
     }
 
-    if (!setStoredPreferences(preferences)) {
+    const storedPreferences = getStoredPreferences();
+    const preferencesUnchanged =
+      storedPreferences !== null &&
+      arePreferencesEqual(preferences, storedPreferences);
+
+    if (!preferencesUnchanged && !setStoredPreferences(preferences)) {
       setSubmitError(
         "Could not save your preferences. Check browser storage settings."
       );
