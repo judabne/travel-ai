@@ -1,0 +1,62 @@
+import type { Interest, Region, TravelPreferences, TravelStyle } from "@/types/travel";
+
+export const STORAGE_KEY = "travel-ai-preferences";
+
+export const DEFAULT_PREFERENCES: TravelPreferences = {
+  interests: [],
+  budget: 2000,
+  duration: 10,
+  travelStyle: "balanced",
+  region: "any",
+};
+
+export const INTERESTS: { id: Interest; label: string }[] = [
+  { id: "hiking", label: "Hiking" },
+  { id: "food", label: "Food" },
+  { id: "beaches", label: "Beaches" },
+  { id: "culture", label: "Culture" },
+  { id: "nightlife", label: "Nightlife" },
+  { id: "nature", label: "Nature" },
+  { id: "photography", label: "Photography" },
+  { id: "wildlife", label: "Wildlife" },
+  { id: "history", label: "History" },
+  { id: "adventure", label: "Adventure" },
+  { id: "wellness", label: "Wellness" },
+  { id: "shopping", label: "Shopping" },
+];
+
+export const TRAVEL_STYLES: { id: TravelStyle; label: string }[] = [
+  { id: "budget", label: "Budget" },
+  { id: "balanced", label: "Balanced" },
+  { id: "comfort", label: "Comfort" },
+  { id: "luxury", label: "Luxury" },
+];
+
+export const REGIONS: { id: Region; label: string }[] = [
+  { id: "any", label: "Any" },
+  { id: "europe", label: "Europe" },
+  { id: "asia", label: "Asia" },
+  { id: "americas", label: "Americas" },
+  { id: "africa", label: "Africa" },
+  { id: "oceania", label: "Oceania" },
+];
+
+export const BUDGET_MIN = 500;
+export const BUDGET_MAX = 10000;
+export const BUDGET_STEP = 100;
+
+export const DURATION_MIN = 3;
+export const DURATION_MAX = 30;
+
+export const MAX_SELECTED_INTERESTS = 5;
+
+/** Simulated loading delay on results page until BE is ready. */
+export const RESULTS_LOADING_DELAY_MS = 2000;
+
+/** Fixed interests shown in the results breakdown (mock data only). */
+export const BREAKDOWN_INTERESTS: Interest[] = ["hiking", "food", "culture"];
+
+export const PRIMARY_COLOR = "#2563eb";
+export const SCORE_GOOD = "#16a34a";
+export const SCORE_BAD = "#dc2626";
+export const SCORE_NEUTRAL = "#64748b";
