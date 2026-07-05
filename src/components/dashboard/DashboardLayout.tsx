@@ -6,6 +6,7 @@ import { ScoreChart } from "@/components/charts/ScoreChart";
 import { CountryDrawer } from "@/components/dashboard/CountryDrawer";
 import { CountrySelector } from "@/components/dashboard/CountrySelector";
 import { DashboardEmptyState } from "@/components/dashboard/DashboardEmptyState";
+import { DashboardErrorState } from "@/components/dashboard/DashboardErrorState";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardSkeleton } from "@/components/dashboard/DashboardSkeleton";
 import { InterestMatchBreakdown } from "@/components/dashboard/InterestMatchBreakdown";
@@ -26,7 +27,7 @@ export function DashboardLayout() {
   const router = useRouter();
   const { isHydrated, preferences, hasStored, hasValidSelections } =
     usePreferencesState();
-  const { results, insight, isLoading, error } = useRecommendations();
+  const { results, insight, isLoading, error, retry } = useRecommendations();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -68,9 +69,18 @@ export function DashboardLayout() {
       ) : isLoading ? (
         <DashboardSkeleton />
       ) : error ? (
-        <SectionCard>
-          <p className="text-sm text-red-600">{error}</p>
-        </SectionCard>
+        <TwoColumnLayout
+          sidebar={
+            <DashboardSidebar
+              preferences={preferences}
+              insight=""
+              isEmpty={false}
+              onRerun={handleRerun}
+            />
+          }
+        >
+          <DashboardErrorState message={error} onRetry={retry} />
+        </TwoColumnLayout>
       ) : (
         <>
           <SectionCard title="Selected Countries" className="mb-8">

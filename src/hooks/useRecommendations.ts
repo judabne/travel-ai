@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { fetchRecommendations } from "@/lib/api/recommend";
 import {
   getCachedRecommendations,
@@ -18,6 +18,7 @@ interface UseRecommendationsResult {
   insight: string;
   isLoading: boolean;
   error: string | null;
+  retry: () => void;
 }
 
 const EMPTY_RESULT: UseRecommendationsResult = {
@@ -25,6 +26,7 @@ const EMPTY_RESULT: UseRecommendationsResult = {
   insight: "",
   isLoading: false,
   error: null,
+  retry: () => {},
 };
 
 interface FetchedRecommendations {
@@ -43,6 +45,13 @@ export function useRecommendations(): UseRecommendationsResult {
   );
   const [fetched, setFetched] = useState<FetchedRecommendations | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+
+  const retry = useCallback(() => {
+    setError(null);
+    setFetched(null);
+    setRetryCount((count) => count + 1);
+  }, []);
 
   const data =
     cached ??
@@ -77,7 +86,7 @@ export function useRecommendations(): UseRecommendationsResult {
     return () => {
       isCancelled = true;
     };
-  }, [hasValidSelections, cached, preferences, requestKey]);
+  }, [hasValidSelections, cached, preferences, requestKey, retryCount]);
 
   if (!hasValidSelections) {
     return EMPTY_RESULT;
@@ -88,5 +97,6 @@ export function useRecommendations(): UseRecommendationsResult {
     insight: data?.insight ?? "",
     isLoading: !data && !error,
     error,
+    retry,
   };
 }
