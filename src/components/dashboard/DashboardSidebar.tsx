@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  formatBudget,
+  formatDuration,
   formatInterests,
   formatRegion,
   formatTravelStyle,
@@ -12,12 +14,14 @@ import type { TravelPreferences } from "@/types/travel";
 interface DashboardSidebarProps {
   preferences: TravelPreferences;
   insight: string;
+  isEmpty: boolean;
   onRerun: () => void;
 }
 
 export function DashboardSidebar({
   preferences,
   insight,
+  isEmpty,
   onRerun,
 }: DashboardSidebarProps) {
   return (
@@ -27,31 +31,31 @@ export function DashboardSidebar({
           <div>
             <dt className="text-slate-500">Budget</dt>
             <dd className="font-medium text-slate-900">
-              ${preferences.budget.toLocaleString()}
+              {formatBudget(preferences, isEmpty)}
             </dd>
           </div>
           <div>
             <dt className="text-slate-500">Duration</dt>
             <dd className="font-medium text-slate-900">
-              {preferences.duration} days
+              {formatDuration(preferences, isEmpty)}
             </dd>
           </div>
           <div>
             <dt className="text-slate-500">Interests</dt>
             <dd className="font-medium text-slate-900">
-              {formatInterests(preferences)}
+              {formatInterests(preferences, isEmpty)}
             </dd>
           </div>
           <div>
             <dt className="text-slate-500">Travel Style</dt>
             <dd className="font-medium text-slate-900">
-              {formatTravelStyle(preferences)}
+              {formatTravelStyle(preferences, isEmpty)}
             </dd>
           </div>
           <div>
             <dt className="text-slate-500">Region</dt>
             <dd className="font-medium text-slate-900">
-              {formatRegion(preferences)}
+              {formatRegion(preferences, isEmpty)}
             </dd>
           </div>
         </dl>
@@ -65,7 +69,7 @@ export function DashboardSidebar({
         </button>
       </SectionCard>
 
-      <InsightBox insight={insight} />
+      {!isEmpty && insight && <InsightBox insight={insight} />}
     </div>
   );
 }

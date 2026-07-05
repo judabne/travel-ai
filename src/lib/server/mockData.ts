@@ -1,19 +1,26 @@
-import type { CountryResult } from "@/types/travel";
+import type { InterestMatch, Region } from "@/types/travel";
 
-export const mockCountryResults: CountryResult[] = [
+export interface CountryProfile {
+  country: string;
+  flag: string;
+  regions: Region[];
+  estimatedCost: number;
+  summary: string;
+  baseTravelEase: number;
+  baseExperience: number;
+  interestMatch: InterestMatch[];
+}
+
+export const countryProfiles: CountryProfile[] = [
   {
     country: "Georgia",
     flag: "🇬🇪",
-    scores: {
-      overall: 92,
-      budget: 95,
-      interest: 90,
-      travelEase: 85,
-      weather: 78,
-    },
+    regions: ["europe", "asia"],
+    estimatedCost: 1650,
     summary:
       "Georgia is ideal for budget travelers who prioritize hiking and culture. Strong value for short trips.",
-    estimatedCost: 1650,
+    baseTravelEase: 85,
+    baseExperience: 78,
     interestMatch: [
       { interest: "hiking", score: 95 },
       { interest: "food", score: 82 },
@@ -32,16 +39,12 @@ export const mockCountryResults: CountryResult[] = [
   {
     country: "Turkey",
     flag: "🇹🇷",
-    scores: {
-      overall: 88,
-      budget: 90,
-      interest: 85,
-      travelEase: 82,
-      weather: 80,
-    },
+    regions: ["europe", "asia"],
+    estimatedCost: 1780,
     summary:
       "Turkey blends rich history with affordable dining and coastal escapes. Great for mixed interest trips.",
-    estimatedCost: 1780,
+    baseTravelEase: 82,
+    baseExperience: 80,
     interestMatch: [
       { interest: "food", score: 97 },
       { interest: "culture", score: 88 },
@@ -60,23 +63,19 @@ export const mockCountryResults: CountryResult[] = [
   {
     country: "Portugal",
     flag: "🇵🇹",
-    scores: {
-      overall: 85,
-      budget: 72,
-      interest: 88,
-      travelEase: 90,
-      weather: 86,
-    },
+    regions: ["europe"],
+    estimatedCost: 2450,
     summary:
       "Portugal excels in food, culture, and coastal scenery. Higher cost but excellent travel infrastructure.",
-    estimatedCost: 2450,
+    baseTravelEase: 90,
+    baseExperience: 86,
     interestMatch: [
       { interest: "beaches", score: 95 },
       { interest: "culture", score: 92 },
       { interest: "food", score: 90 },
       { interest: "nightlife", score: 78 },
       { interest: "nature", score: 70 },
-      { interest: "hiking", score: 50 },
+      { interest: "hiking", score: 65 },
       { interest: "photography", score: 91 },
       { interest: "wildlife", score: 62 },
       { interest: "history", score: 89 },
@@ -88,16 +87,12 @@ export const mockCountryResults: CountryResult[] = [
   {
     country: "Vietnam",
     flag: "🇻🇳",
-    scores: {
-      overall: 83,
-      budget: 92,
-      interest: 82,
-      travelEase: 70,
-      weather: 75,
-    },
+    regions: ["asia"],
+    estimatedCost: 1420,
     summary:
       "Vietnam delivers exceptional value for food and nature lovers. Longer flights but low daily costs.",
-    estimatedCost: 1420,
+    baseTravelEase: 70,
+    baseExperience: 75,
     interestMatch: [
       { interest: "food", score: 94 },
       { interest: "nature", score: 90 },
@@ -114,12 +109,3 @@ export const mockCountryResults: CountryResult[] = [
     ],
   },
 ];
-
-export function getTopInsight(results: CountryResult[]): string {
-  if (results.length === 0) {
-    return "No matches found. Try adjusting your filters.";
-  }
-
-  const top = [...results].sort((a, b) => b.scores.overall - a.scores.overall)[0];
-  return `${top.country} offers the best overall balance of cost and experience for your trip.`;
-}

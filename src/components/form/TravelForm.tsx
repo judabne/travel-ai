@@ -17,9 +17,11 @@ export function TravelForm() {
     setTravelStyle,
     setRegion,
     submit,
+    isNavigating,
+    submitError,
   } = useTravelForm();
 
-  const canSubmit = preferences.interests.length > 0;
+  const canSubmit = preferences.interests.length > 0 && !isNavigating;
 
   return (
     <form
@@ -58,7 +60,10 @@ export function TravelForm() {
         <RegionSelector value={preferences.region} onChange={setRegion} />
       </SectionCard>
 
-      <div className="flex justify-center pt-4">
+      <div className="flex flex-col items-center gap-3 pt-4">
+        {submitError && (
+          <p className="text-sm text-red-600">{submitError}</p>
+        )}
         <button
           type="submit"
           disabled={!canSubmit}
