@@ -8,9 +8,10 @@ export type Interest =
   | "photography"
   | "wildlife"
   | "history"
-  | "adventure"
   | "wellness"
-  | "shopping";
+  | "shopping"
+  | "sports"
+  | "cars";
 
 export type TravelStyle = "budget" | "balanced" | "comfort" | "luxury";
 

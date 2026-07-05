@@ -42,7 +42,7 @@ export function DashboardLayout() {
     setIsDrawerOpen(true);
   };
 
-  const handleRerun = () => {
+  const handleTweakParameters = () => {
     router.push("/");
   };
 
@@ -60,7 +60,7 @@ export function DashboardLayout() {
               preferences={preferences}
               insight=""
               isEmpty={isEmptySidebar}
-              onRerun={handleRerun}
+              onTweakParameters={handleTweakParameters}
             />
           }
         >
@@ -75,7 +75,7 @@ export function DashboardLayout() {
               preferences={preferences}
               insight=""
               isEmpty={false}
-              onRerun={handleRerun}
+              onTweakParameters={handleTweakParameters}
             />
           }
         >
@@ -97,7 +97,7 @@ export function DashboardLayout() {
                 preferences={preferences}
                 insight={insight}
                 isEmpty={false}
-                onRerun={handleRerun}
+                onTweakParameters={handleTweakParameters}
               />
             }
           >

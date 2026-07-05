@@ -6,9 +6,17 @@ import { DurationSelector } from "@/components/form/DurationSelector";
 import { InterestSelector } from "@/components/form/InterestSelector";
 import { RegionSelector } from "@/components/form/RegionSelector";
 import { TravelStyleSelector } from "@/components/form/TravelStyleSelector";
-import { useTravelForm } from "@/hooks/useTravelForm";
+import { TravelFormSkeleton } from "@/components/form/TravelFormSkeleton";
+import { DEFAULT_PREFERENCES } from "@/lib/constants";
+import { getRecommendRequestKey } from "@/lib/recommendCache";
+import { usePreferencesState, useTravelForm } from "@/hooks/useTravelForm";
+import type { TravelPreferences } from "@/types/travel";
 
-export function TravelForm() {
+function TravelFormContent({
+  initialPreferences,
+}: {
+  initialPreferences: TravelPreferences;
+}) {
   const {
     preferences,
     toggleInterest,
@@ -19,7 +27,7 @@ export function TravelForm() {
     submit,
     isNavigating,
     submitError,
-  } = useTravelForm();
+  } = useTravelForm(initialPreferences);
 
   const canSubmit = preferences.interests.length > 0 && !isNavigating;
 
@@ -73,5 +81,29 @@ export function TravelForm() {
         </button>
       </div>
     </form>
+  );
+}
+
+export function TravelForm() {
+  const { isHydrated, preferences: storedPreferences, hasStored } =
+    usePreferencesState();
+
+  if (!isHydrated) {
+    return <TravelFormSkeleton />;
+  }
+
+  const initialPreferences = hasStored
+    ? storedPreferences
+    : DEFAULT_PREFERENCES;
+
+  return (
+    <TravelFormContent
+      key={
+        hasStored
+          ? getRecommendRequestKey(initialPreferences)
+          : "default"
+      }
+      initialPreferences={initialPreferences}
+    />
   );
 }

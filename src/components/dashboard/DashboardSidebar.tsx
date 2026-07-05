@@ -15,14 +15,14 @@ interface DashboardSidebarProps {
   preferences: TravelPreferences;
   insight: string;
   isEmpty: boolean;
-  onRerun: () => void;
+  onTweakParameters: () => void;
 }
 
 export function DashboardSidebar({
   preferences,
   insight,
   isEmpty,
-  onRerun,
+  onTweakParameters,
 }: DashboardSidebarProps) {
   return (
     <div className="min-w-0 space-y-6 lg:sticky lg:top-6 lg:self-start">
@@ -62,10 +62,10 @@ export function DashboardSidebar({
 
         <button
           type="button"
-          onClick={onRerun}
+          onClick={onTweakParameters}
           className="mt-6 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
         >
-          Re-run Analysis
+          Tweak Parameters
         </button>
       </SectionCard>
 
