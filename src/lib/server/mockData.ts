@@ -1,9 +1,8 @@
-import type { InterestMatch, Region } from "@/types/travel";
+import type { InterestMatch } from "@/types/travel";
 
 export interface CountryProfile {
   country: string;
   flag: string;
-  regions: Region[];
   estimatedCost: number;
   summary: string;
   visaScore: number;
@@ -16,7 +15,6 @@ export const countryProfiles: CountryProfile[] = [
   {
     country: "Georgia",
     flag: "🇬🇪",
-    regions: ["europe", "asia"],
     estimatedCost: 1650,
     summary:
       "Georgia is ideal for budget travelers who prioritize hiking and culture. Strong value for short trips.",
@@ -41,7 +39,6 @@ export const countryProfiles: CountryProfile[] = [
   {
     country: "Turkey",
     flag: "🇹🇷",
-    regions: ["europe", "asia"],
     estimatedCost: 1780,
     summary:
       "Turkey blends rich history with affordable dining and coastal escapes. Great for mixed interest trips.",
@@ -66,7 +63,6 @@ export const countryProfiles: CountryProfile[] = [
   {
     country: "Portugal",
     flag: "🇵🇹",
-    regions: ["europe"],
     estimatedCost: 2450,
     summary:
       "Portugal excels in food, culture, and coastal scenery. Higher cost but excellent travel infrastructure.",
@@ -91,7 +87,6 @@ export const countryProfiles: CountryProfile[] = [
   {
     country: "Vietnam",
     flag: "🇻🇳",
-    regions: ["asia"],
     estimatedCost: 1420,
     summary:
       "Vietnam delivers exceptional value for food and nature lovers. Longer flights but low daily costs.",
