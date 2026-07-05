@@ -11,21 +11,9 @@ import type {
   InterestMatch,
   RecommendRequest,
   RecommendResponse,
-  Region,
 } from "@/types/travel";
 
 export type { RecommendRequest, RecommendResponse };
-
-function filterByRegion(
-  profiles: typeof countryProfiles,
-  region: Region
-): typeof countryProfiles {
-  if (region === "any") {
-    return profiles;
-  }
-
-  return profiles.filter((profile) => profile.regions.includes(region));
-}
 
 function buildInterestMatch(
   interestMatch: InterestMatch[],
@@ -86,8 +74,7 @@ export function getTopInsight(results: CountryResult[]): string {
 export function getRecommendations(
   preferences: RecommendRequest
 ): RecommendResponse {
-  const filtered = filterByRegion(countryProfiles, preferences.region);
-  const results = filtered
+  const results = countryProfiles
     .map((profile) => scoreCountry(profile, preferences))
     .sort((a, b) => b.scores.overall - a.scores.overall);
 
