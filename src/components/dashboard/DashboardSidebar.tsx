@@ -5,7 +5,6 @@ import {
   formatDuration,
   formatInterests,
   formatRegion,
-  formatTravelStyle,
 } from "@/lib/preferenceHelpers";
 import { InsightBox } from "@/components/dashboard/InsightBox";
 import { SectionCard } from "@/components/layout/SectionCard";
@@ -47,13 +46,7 @@ export function DashboardSidebar({
             </dd>
           </div>
           <div>
-            <dt className="text-slate-500">Travel Style</dt>
-            <dd className="font-medium text-slate-900">
-              {formatTravelStyle(preferences, isEmpty)}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-slate-500">Region</dt>
+            <dt className="text-slate-500">Regions</dt>
             <dd className="font-medium text-slate-900">
               {formatRegion(preferences, isEmpty)}
             </dd>

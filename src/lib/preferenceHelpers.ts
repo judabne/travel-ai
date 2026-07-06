@@ -1,5 +1,5 @@
 import { getInterestLabel } from "@/lib/interestHelpers";
-import { REGIONS, TRAVEL_STYLES } from "@/lib/constants";
+import { REGIONS } from "@/lib/constants";
 import type { TravelPreferences } from "@/types/travel";
 
 export function formatInterests(
@@ -35,30 +35,18 @@ export function formatDuration(
   return `${preferences.duration} days`;
 }
 
-export function formatTravelStyle(
-  preferences: TravelPreferences,
-  isEmpty = false
-): string {
-  if (isEmpty) {
-    return "—";
-  }
-
-  return (
-    TRAVEL_STYLES.find((style) => style.id === preferences.travelStyle)?.label ??
-    preferences.travelStyle
-  );
-}
-
 export function formatRegion(
   preferences: TravelPreferences,
   isEmpty = false
 ): string {
-  if (isEmpty) {
+  if (isEmpty || preferences.regions.length === 0) {
     return "—";
   }
 
-  return (
-    REGIONS.find((region) => region.id === preferences.region)?.label ??
-    preferences.region
-  );
+  return preferences.regions
+    .map(
+      (region) =>
+        REGIONS.find((item) => item.id === region)?.label ?? region
+    )
+    .join(", ");
 }

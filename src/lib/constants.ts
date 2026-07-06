@@ -1,4 +1,4 @@
-import type { Interest, Region, TravelPreferences, TravelStyle } from "@/types/travel";
+import type { Interest, Region, TravelPreferences } from "@/types/travel";
 
 export const STORAGE_KEY = "travel-ai-preferences";
 export const RESULTS_STORAGE_KEY = "travel-ai-results";
@@ -8,8 +8,7 @@ export const DEFAULT_PREFERENCES: TravelPreferences = {
   interests: [],
   budget: 2000,
   duration: 10,
-  travelStyle: "balanced",
-  region: "any",
+  regions: [],
 };
 
 export const INTERESTS: { id: Interest; label: string }[] = [
@@ -28,15 +27,7 @@ export const INTERESTS: { id: Interest; label: string }[] = [
   { id: "cars", label: "Cars" },
 ];
 
-export const TRAVEL_STYLES: { id: TravelStyle; label: string }[] = [
-  { id: "budget", label: "Budget" },
-  { id: "balanced", label: "Balanced" },
-  { id: "comfort", label: "Comfort" },
-  { id: "luxury", label: "Luxury" },
-];
-
 export const REGIONS: { id: Region; label: string }[] = [
-  { id: "any", label: "Any" },
   { id: "europe", label: "Europe" },
   { id: "asia", label: "Asia" },
   { id: "americas", label: "Americas" },

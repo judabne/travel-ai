@@ -21,7 +21,7 @@ export async function fetchRecommendations(
         interests: preferences.interests,
         budget: preferences.budget,
         duration: preferences.duration,
-        region: preferences.region,
+        regions: preferences.regions,
       }),
     });
 

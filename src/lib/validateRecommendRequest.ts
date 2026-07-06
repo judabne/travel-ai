@@ -54,9 +54,15 @@ export function parseRecommendRequest(body: unknown): RecommendRequest | null {
     return null;
   }
 
+  if (!Array.isArray(request.regions)) {
+    return null;
+  }
+
   if (
-    typeof request.region !== "string" ||
-    !VALID_REGIONS.has(request.region as Region)
+    !request.regions.every(
+      (region): region is Region =>
+        typeof region === "string" && VALID_REGIONS.has(region as Region)
+    )
   ) {
     return null;
   }
@@ -65,6 +71,6 @@ export function parseRecommendRequest(body: unknown): RecommendRequest | null {
     interests: request.interests,
     budget: request.budget,
     duration: request.duration,
-    region: request.region as Region,
+    regions: request.regions,
   };
 }

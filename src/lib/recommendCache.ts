@@ -16,8 +16,7 @@ export function getRecommendRequestKey(
     interests: [...preferences.interests].sort(),
     budget: preferences.budget,
     duration: preferences.duration,
-    travelStyle: preferences.travelStyle,
-    region: preferences.region,
+    regions: [...preferences.regions].sort(),
   });
 }
 
@@ -45,18 +44,22 @@ export function arePreferencesEqual(
   if (
     left.budget !== right.budget ||
     left.duration !== right.duration ||
-    left.travelStyle !== right.travelStyle ||
-    left.region !== right.region ||
-    left.interests.length !== right.interests.length
+    left.interests.length !== right.interests.length ||
+    left.regions.length !== right.regions.length
   ) {
     return false;
   }
 
   const leftInterests = [...left.interests].sort();
   const rightInterests = [...right.interests].sort();
+  const leftRegions = [...left.regions].sort();
+  const rightRegions = [...right.regions].sort();
 
-  return leftInterests.every(
-    (interest, index) => interest === rightInterests[index]
+  return (
+    leftInterests.every(
+      (interest, index) => interest === rightInterests[index]
+    ) &&
+    leftRegions.every((region, index) => region === rightRegions[index])
   );
 }
 

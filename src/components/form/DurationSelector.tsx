@@ -12,8 +12,8 @@ export function DurationSelector({ value, onChange }: DurationSelectorProps) {
   const increment = () => onChange(Math.min(DURATION_MAX, value + 1));
 
   return (
-    <div className="space-y-3">
-      <span className="text-sm font-medium text-slate-700">Duration</span>
+    <div>
+      <span className="mb-4 block text-sm font-medium text-slate-700">Duration</span>
       <div className="flex items-center gap-4">
         <button
           type="button"
