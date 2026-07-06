@@ -127,6 +127,16 @@ export function DashboardLayout() {
 
               <InterestMatchBreakdown results={results} />
             </div>
+
+            <div className="mt-6 hidden justify-center md:flex">
+              <button
+                type="button"
+                onClick={handleTweakParameters}
+                className="rounded-lg border border-slate-200 bg-white px-6 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+              >
+                Tweak Parameters
+              </button>
+            </div>
           </TwoColumnLayout>
 
           <CountryDrawer
