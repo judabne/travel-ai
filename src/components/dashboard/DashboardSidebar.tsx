@@ -24,8 +24,8 @@ export function DashboardSidebar({
   onTweakParameters,
 }: DashboardSidebarProps) {
   return (
-    <div className="min-w-0 space-y-6 lg:sticky lg:top-6 lg:self-start">
-      <SectionCard title="Filters">
+    <div className="flex min-w-0 flex-col gap-6 lg:sticky lg:top-6 lg:self-start">
+      <SectionCard title="Filters" className="order-2 lg:order-1">
         <dl className="space-y-3 text-sm">
           <div>
             <dt className="text-slate-500">Budget</dt>
@@ -62,7 +62,11 @@ export function DashboardSidebar({
         </button>
       </SectionCard>
 
-      {!isEmpty && insight && <InsightBox insight={insight} />}
+      {!isEmpty && insight && (
+        <div className="order-1 lg:order-2">
+          <InsightBox insight={insight} />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,21 +1,23 @@
 import { SectionCard } from "@/components/layout/SectionCard";
 
 const HOW_IT_WORKS = [
-  "Enter preferences",
+  "Enter interests and preferences",
   "We score destinations",
-  "Compare countries across 5 dimensions",
+  "Compare countries across different dimensions",
 ];
 
 const WHAT_YOU_GET = [
   "Ranked countries",
-  "Score breakdown",
-  "Visual charts",
-  "Travel insights",
+  "Metric breakdown",
+  "Interactive charts",
+  "AI travel insight",
 ];
 
-const EXAMPLE_OUTPUT = [
-  { country: "Georgia", match: "Budget + Hiking" },
-  { country: "Turkey", match: "Food + Culture" },
+const WHAT_WE_SCORE = [
+  "Interest match",
+  "Budget fit",
+  "Travel ease",
+  "Visitor satisfaction",
 ];
 
 export function HomeInfoSidebar() {
@@ -40,13 +42,12 @@ export function HomeInfoSidebar() {
         </ul>
       </SectionCard>
 
-      <SectionCard title="Example output">
-        <ul className="space-y-3 text-sm">
-          {EXAMPLE_OUTPUT.map(({ country, match }) => (
-            <li key={country} className="text-slate-700">
-              <span className="font-medium text-slate-900">{country}</span>
-              <span className="text-slate-400"> → </span>
-              {match}
+      <SectionCard title="What we score">
+        <ul className="space-y-2 text-sm text-slate-700">
+          {WHAT_WE_SCORE.map((item) => (
+            <li key={item} className="flex items-start gap-2">
+              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" />
+              {item}
             </li>
           ))}
         </ul>
