@@ -44,7 +44,8 @@ export function buildBarChartData(
 export function buildChartOptions(
   title: string,
   onBarClick?: (index: number) => void,
-  getTooltipLabel?: (index: number) => string
+  getTooltipLabel?: (index: number) => string | string[],
+  tooltipDisplayColors = true
 ): ChartOptions<"bar"> {
   return {
     responsive: true,
@@ -59,6 +60,7 @@ export function buildChartOptions(
         padding: { bottom: 16 },
       },
       tooltip: {
+        displayColors: tooltipDisplayColors,
         callbacks: {
           label: (context) => {
             const index = context.dataIndex;
@@ -103,9 +105,15 @@ export function buildChartOptions(
 export function getPrimaryBarOptions(
   title: string,
   onBarClick?: (index: number) => void,
-  getTooltipLabel?: (index: number) => string
+  getTooltipLabel?: (index: number) => string | string[],
+  tooltipDisplayColors = true
 ): ChartOptions<"bar"> {
-  const options = buildChartOptions(title, onBarClick, getTooltipLabel);
+  const options = buildChartOptions(
+    title,
+    onBarClick,
+    getTooltipLabel,
+    tooltipDisplayColors
+  );
   if (options.plugins?.title) {
     options.plugins.title.color = PRIMARY_COLOR;
   }

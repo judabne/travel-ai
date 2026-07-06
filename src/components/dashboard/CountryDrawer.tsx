@@ -20,6 +20,7 @@ export function CountryDrawer({ country, isOpen, onClose }: CountryDrawerProps) 
     { label: "Travel Ease", value: country.scores.travelEase },
     { label: "Visitor Satisfaction", value: country.scores.visitorSatisfaction },
   ];
+  const overallScore = country.scores.overall;
 
   return (
     <>
@@ -49,9 +50,17 @@ export function CountryDrawer({ country, isOpen, onClose }: CountryDrawerProps) 
 
         <div className="flex-1 overflow-y-auto px-6 py-6">
           <section className="mb-8">
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
-              Score Breakdown
-            </h3>
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-base font-semibold uppercase tracking-wide text-slate-500">
+                Score
+              </h3>
+              <span
+                className="text-base font-semibold"
+                style={{ color: getScoreColor(overallScore) }}
+              >
+                {overallScore}/100
+              </span>
+            </div>
             <ul className="space-y-3">
               {scoreItems.map(({ label, value }) => (
                 <li
@@ -71,7 +80,7 @@ export function CountryDrawer({ country, isOpen, onClose }: CountryDrawerProps) 
           </section>
 
           <section className="mb-8">
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">
+            <h3 className="mb-3 text-base font-semibold uppercase tracking-wide text-slate-500">
               AI Summary
             </h3>
             <p className="text-sm leading-relaxed text-slate-700">
