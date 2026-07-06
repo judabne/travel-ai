@@ -1,14 +1,23 @@
 import { NextResponse } from "next/server";
 import { getRecommendations } from "@/lib/server/recommend";
+import { checkRecommendRateLimit } from "@/lib/server/rateLimit";
 import { parseRecommendRequest } from "@/lib/validateRecommendRequest";
 
-const TRIAL_RESPONSE_DELAY_MS = 3000;
-
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export async function POST(request: Request) {
+  const rateLimit = checkRecommendRateLimit(request);
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again later." },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(rateLimit.retryAfterSeconds),
+        },
+      }
+    );
+  }
+
   try {
     const body: unknown = await request.json();
     const payload = parseRecommendRequest(body);
@@ -23,9 +32,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const response = getRecommendations(payload);
-
-    await delay(TRIAL_RESPONSE_DELAY_MS);
+    const response = await getRecommendations(payload);
 
     return NextResponse.json(response);
   } catch {

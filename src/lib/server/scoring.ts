@@ -1,5 +1,3 @@
-import type { Interest, InterestMatch } from "@/types/travel";
-
 function clampScore(score: number): number {
   return Math.max(0, Math.min(100, Math.round(score)));
 }
@@ -10,32 +8,23 @@ export function computeBudgetScore(
 ): number {
   const ratio = estimatedCost / budget;
 
-  if (ratio <= 0.75) return 95;
-  if (ratio <= 0.9) return 88;
-  if (ratio <= 1.0) return 80;
-  if (ratio <= 1.15) return 65;
+  if (ratio <= 1.0) return 100;
+  if (ratio <= 1.05) return 90;
+  if (ratio <= 1.1) return 80;
+  if (ratio <= 1.2) return 60;
+  if (ratio <= 1.3) return 50;
   return 45;
 }
 
 export function computeInterestScore(
-  interestMatch: InterestMatch[],
-  selectedInterests: Interest[]
+  interestMatch: { score: number }[]
 ): number {
-  if (selectedInterests.length === 0) {
+  if (interestMatch.length === 0) {
     return 0;
   }
 
-  const scores = interestMatch
-    .filter((match) => selectedInterests.includes(match.interest))
-    .map((match) => match.score);
-
-  if (scores.length === 0) {
-    return 50;
-  }
-
-  return Math.round(
-    scores.reduce((total, score) => total + score, 0) / scores.length
-  );
+  const total = interestMatch.reduce((sum, match) => sum + match.score, 0);
+  return clampScore(total / interestMatch.length);
 }
 
 export function computeTravelEase(

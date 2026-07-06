@@ -1,65 +1,10 @@
-import { countryProfiles } from "@/lib/server/mockData";
-import {
-  computeBudgetScore,
-  computeInterestScore,
-  computeOverallScore,
-  computeTravelEase,
-} from "@/lib/server/scoring";
-import type {
-  CountryResult,
-  Interest,
-  InterestMatch,
-  RecommendRequest,
-  RecommendResponse,
-} from "@/types/travel";
+import { fetchAiRecommendations } from "@/lib/server/aiClient";
+import { mapAiResponseToRecommendResponse } from "@/lib/server/mapAiResults";
+import type { RecommendRequest, RecommendResponse } from "@/types/travel";
 
 export type { RecommendRequest, RecommendResponse };
 
-function buildInterestMatch(
-  interestMatch: InterestMatch[],
-  selectedInterests: Interest[]
-): InterestMatch[] {
-  return interestMatch
-    .filter((match) => selectedInterests.includes(match.interest))
-    .sort((a, b) => b.score - a.score);
-}
-
-function scoreCountry(
-  profile: (typeof countryProfiles)[number],
-  preferences: RecommendRequest
-): CountryResult {
-  const budget = computeBudgetScore(profile.estimatedCost, preferences.budget);
-  const interest = computeInterestScore(
-    profile.interestMatch,
-    preferences.interests
-  );
-  const travelEase = computeTravelEase(
-    profile.visaScore,
-    profile.infrastructureScore
-  );
-  const experience = profile.experienceScore;
-  const overall = computeOverallScore(budget, interest, travelEase, experience);
-
-  return {
-    country: profile.country,
-    flag: profile.flag,
-    scores: {
-      overall,
-      budget,
-      interest,
-      travelEase,
-      experience,
-    },
-    summary: profile.summary,
-    estimatedCost: profile.estimatedCost,
-    interestMatch: buildInterestMatch(
-      profile.interestMatch,
-      preferences.interests
-    ),
-  };
-}
-
-export function getTopInsight(results: CountryResult[]): string {
+export function getTopInsight(results: RecommendResponse["results"]): string {
   if (results.length === 0) {
     return "No matches found. Try adjusting your filters.";
   }
@@ -71,15 +16,22 @@ export function getTopInsight(results: CountryResult[]): string {
   return `${top.country} offers the best overall balance of cost and experience for your trip.`;
 }
 
-export function getRecommendations(
+export async function getRecommendations(
   preferences: RecommendRequest
-): RecommendResponse {
-  const results = countryProfiles
-    .map((profile) => scoreCountry(profile, preferences))
-    .sort((a, b) => b.scores.overall - a.scores.overall);
+): Promise<RecommendResponse> {
+  const aiResponse = await fetchAiRecommendations(preferences);
+  const response = mapAiResponseToRecommendResponse(
+    aiResponse,
+    preferences.interests,
+    preferences.budget
+  );
 
-  return {
-    results,
-    insight: getTopInsight(results),
-  };
+  if (!aiResponse.insight.trim()) {
+    return {
+      ...response,
+      insight: getTopInsight(response.results),
+    };
+  }
+
+  return response;
 }
