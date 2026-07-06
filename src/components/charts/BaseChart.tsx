@@ -26,6 +26,7 @@ interface BaseChartProps {
   options?: ChartOptions<"bar">;
   onBarClick?: (index: number) => void;
   highlight?: boolean;
+  getTooltipLabel?: (index: number) => string;
 }
 
 export function BaseChart({
@@ -35,6 +36,7 @@ export function BaseChart({
   options,
   onBarClick,
   highlight = false,
+  getTooltipLabel,
 }: BaseChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<ChartJS<"bar">>(null);
@@ -42,8 +44,8 @@ export function BaseChart({
   const chartOptions =
     options ??
     (highlight
-      ? getPrimaryBarOptions(title, onBarClick)
-      : buildChartOptions(title, onBarClick));
+      ? getPrimaryBarOptions(title, onBarClick, getTooltipLabel)
+      : buildChartOptions(title, onBarClick, getTooltipLabel));
 
   useEffect(() => {
     const container = containerRef.current;
