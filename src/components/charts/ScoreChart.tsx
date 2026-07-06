@@ -24,7 +24,9 @@ export function ScoreChart({
     metric === "budget"
       ? (index: number) =>
           `Estimated cost: $${results[index].estimatedCost.toLocaleString()}`
-      : undefined;
+      : metric === "overall"
+        ? (index: number) => results[index].summary
+        : undefined;
 
   return (
     <BaseChart
@@ -34,6 +36,7 @@ export function ScoreChart({
       onBarClick={onCountryClick}
       highlight={highlight}
       getTooltipLabel={getTooltipLabel}
+      hideTooltipColor={metric === "overall"}
     />
   );
 }
