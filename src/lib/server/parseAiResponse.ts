@@ -75,7 +75,7 @@ function parseAiCountry(
     typeof country.summary !== "string" ||
     typeof country.estimatedCost !== "number" ||
     !Number.isFinite(country.estimatedCost) ||
-    !isValidScore(country.experienceScore) ||
+    !isValidScore(country.visitorSatisfactionScore) ||
     !isValidScore(country.visaScore) ||
     !isValidScore(country.infrastructureScore)
   ) {
@@ -92,7 +92,7 @@ function parseAiCountry(
     flag: country.flag,
     summary: country.summary,
     estimatedCost: country.estimatedCost,
-    experienceScore: country.experienceScore,
+    visitorSatisfactionScore: country.visitorSatisfactionScore,
     visaScore: country.visaScore,
     infrastructureScore: country.infrastructureScore,
     interestMatch,

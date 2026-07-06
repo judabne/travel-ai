@@ -32,7 +32,7 @@ export interface CountryScores {
   budget: number;
   interest: number;
   travelEase: number;
-  experience: number;
+  visitorSatisfaction: number;
 }
 
 export interface InterestMatch {

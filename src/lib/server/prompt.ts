@@ -23,6 +23,7 @@ Given a user's trip preferences, return exactly 4 destination recommendations.
 - Do NOT invent or assume interests outside the provided list
 - interestMatch MUST only contain the user's selected interests
 - Score each interest 0–100 by how strongly the destination is known for it; use interest ids in interestMatch.
+- Score visitorSatisfactionScore 0–100 by how satisfied typical visitors are with the destination overall; do not factor visa, infrastructure, budget, or interest scores into it.
 - All scores must be integers from 0 to 100
 - Higher scores always mean stronger match quality
 - estimatedCost must reflect realistic total trip cost for the full duration (not a per-day rate)
@@ -47,7 +48,7 @@ Return valid JSON only:
       "summary": "Maximum 30 words in 2 sentences explaining why this destination fits.",
       "estimatedCost": number,
 
-      "experienceScore": number,
+      "visitorSatisfactionScore": number,
       "visaScore": number,
       "infrastructureScore": number,
 

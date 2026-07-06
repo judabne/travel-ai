@@ -13,7 +13,7 @@ export function getTopInsight(results: RecommendResponse["results"]): string {
     (a, b) => b.scores.overall - a.scores.overall
   )[0];
 
-  return `${top.country} offers the best overall balance of cost and experience for your trip.`;
+  return `${top.country} offers the best overall balance of cost and visitor satisfaction for your trip.`;
 }
 
 export async function getRecommendations(
