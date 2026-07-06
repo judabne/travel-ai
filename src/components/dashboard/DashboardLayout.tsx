@@ -17,7 +17,7 @@ import { useRecommendations } from "@/hooks/useRecommendations";
 import { usePreferencesState } from "@/hooks/useTravelForm";
 
 const METRIC_CHARTS = [
-  { metric: "budget" as const, title: "Budget Fit vs User Budget" },
+  { metric: "budget" as const, title: "Budget Fit" },
   { metric: "interest" as const, title: "Interest Compatibility Score" },
   { metric: "travelEase" as const, title: "Travel Ease Score" },
   { metric: "visitorSatisfaction" as const, title: "Visitor Satisfaction Score" },
