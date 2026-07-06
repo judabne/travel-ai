@@ -20,7 +20,7 @@ const METRIC_CHARTS = [
   { metric: "budget" as const, title: "Budget Fit vs User Budget" },
   { metric: "interest" as const, title: "Interest Compatibility Score" },
   { metric: "travelEase" as const, title: "Travel Ease Score" },
-  { metric: "experience" as const, title: "Experience Quality Score" },
+  { metric: "visitorSatisfaction" as const, title: "Visitor Satisfaction Score" },
 ];
 
 export function DashboardLayout() {

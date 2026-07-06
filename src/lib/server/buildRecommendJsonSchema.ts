@@ -29,7 +29,7 @@ export function buildRecommendJsonSchema(request: RecommendRequest) {
       flag: { type: "string" },
       summary: { type: "string" },
       estimatedCost: { type: "number" },
-      experienceScore: scoreSchema,
+      visitorSatisfactionScore: scoreSchema,
       visaScore: scoreSchema,
       infrastructureScore: scoreSchema,
       interestMatch: {
@@ -44,7 +44,7 @@ export function buildRecommendJsonSchema(request: RecommendRequest) {
       "flag",
       "summary",
       "estimatedCost",
-      "experienceScore",
+      "visitorSatisfactionScore",
       "visaScore",
       "infrastructureScore",
       "interestMatch",

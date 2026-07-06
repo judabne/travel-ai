@@ -38,12 +38,12 @@ export function computeOverallScore(
   budgetScore: number,
   interestScore: number,
   travelEase: number,
-  experienceScore: number
+  visitorSatisfactionScore: number
 ): number {
   return clampScore(
     budgetScore * 0.25 +
       interestScore * 0.35 +
       travelEase * 0.25 +
-      experienceScore * 0.15
+      visitorSatisfactionScore * 0.15
   );
 }

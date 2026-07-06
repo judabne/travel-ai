@@ -21,12 +21,12 @@ function mapAiCountry(
     country.visaScore,
     country.infrastructureScore
   );
-  const experience = country.experienceScore;
+  const visitorSatisfaction = country.visitorSatisfactionScore;
   const overall = computeOverallScore(
     budgetScore,
     interest,
     travelEase,
-    experience
+    visitorSatisfaction
   );
 
   return {
@@ -37,7 +37,7 @@ function mapAiCountry(
       budget: budgetScore,
       interest,
       travelEase,
-      experience,
+      visitorSatisfaction,
     },
     summary: country.summary,
     estimatedCost: country.estimatedCost,

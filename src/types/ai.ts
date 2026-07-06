@@ -10,7 +10,7 @@ export interface AiCountryRecommendation {
   flag: string;
   summary: string;
   estimatedCost: number;
-  experienceScore: number;
+  visitorSatisfactionScore: number;
   visaScore: number;
   infrastructureScore: number;
   interestMatch: AiInterestMatch[];
