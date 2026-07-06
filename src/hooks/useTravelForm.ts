@@ -9,7 +9,7 @@ import {
 } from "@/lib/recommendCache";
 import { safeSessionStorageGet } from "@/lib/safeSessionStorage";
 import { DEFAULT_PREFERENCES, MAX_SELECTED_INTERESTS, STORAGE_KEY } from "@/lib/constants";
-import type { Interest, Region, TravelPreferences, TravelStyle } from "@/types/travel";
+import type { Interest, Region, TravelPreferences } from "@/types/travel";
 
 export interface PreferencesState {
   isHydrated: boolean;
@@ -145,12 +145,16 @@ export function useTravelForm(initialPreferences: TravelPreferences) {
     setPreferences((prev) => ({ ...prev, duration }));
   }, []);
 
-  const setTravelStyle = useCallback((travelStyle: TravelStyle) => {
-    setPreferences((prev) => ({ ...prev, travelStyle }));
-  }, []);
-
-  const setRegion = useCallback((region: Region) => {
-    setPreferences((prev) => ({ ...prev, region }));
+  const toggleRegion = useCallback((region: Region) => {
+    setPreferences((prev) => {
+      const exists = prev.regions.includes(region);
+      return {
+        ...prev,
+        regions: exists
+          ? prev.regions.filter((item) => item !== region)
+          : [...prev.regions, region],
+      };
+    });
   }, []);
 
   const submit = useCallback(() => {
@@ -181,8 +185,7 @@ export function useTravelForm(initialPreferences: TravelPreferences) {
     toggleInterest,
     setBudget,
     setDuration,
-    setTravelStyle,
-    setRegion,
+    toggleRegion,
     submit,
     isNavigating,
     submitError,

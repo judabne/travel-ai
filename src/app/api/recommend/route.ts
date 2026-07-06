@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            "Invalid request. Provide valid interests, budget, duration, and region.",
+            "Invalid request. Provide valid interests, budget, duration, and regions.",
         },
         { status: 400 }
       );

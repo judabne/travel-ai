@@ -4,28 +4,36 @@ import { REGIONS } from "@/lib/constants";
 import type { Region } from "@/types/travel";
 
 interface RegionSelectorProps {
-  value: Region;
-  onChange: (value: Region) => void;
+  selected: Region[];
+  onToggle: (region: Region) => void;
 }
 
-export function RegionSelector({ value, onChange }: RegionSelectorProps) {
+export function RegionSelector({ selected, onToggle }: RegionSelectorProps) {
   return (
-    <div className="space-y-3">
-      <label htmlFor="region" className="text-sm font-medium text-slate-700">
-        Region
-      </label>
-      <select
-        id="region"
-        value={value}
-        onChange={(event) => onChange(event.target.value as Region)}
-        className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-      >
-        {REGIONS.map(({ id, label }) => (
-          <option key={id} value={id}>
-            {label}
-          </option>
-        ))}
-      </select>
+    <div>
+      <span className="mb-4 block text-sm font-medium text-slate-700">
+        Region <span className="font-normal text-slate-400">(optional)</span>
+      </span>
+      <div className="flex flex-wrap gap-3">
+        {REGIONS.map(({ id, label }) => {
+          const isSelected = selected.includes(id);
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => onToggle(id)}
+              aria-pressed={isSelected}
+              className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                isSelected
+                  ? "border-blue-600 bg-blue-600 text-white"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

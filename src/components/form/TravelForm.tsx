@@ -5,7 +5,6 @@ import { BudgetSlider } from "@/components/form/BudgetSlider";
 import { DurationSelector } from "@/components/form/DurationSelector";
 import { InterestSelector } from "@/components/form/InterestSelector";
 import { RegionSelector } from "@/components/form/RegionSelector";
-import { TravelStyleSelector } from "@/components/form/TravelStyleSelector";
 import { TravelFormSkeleton } from "@/components/form/TravelFormSkeleton";
 import { DEFAULT_PREFERENCES } from "@/lib/constants";
 import { getRecommendRequestKey } from "@/lib/recommendCache";
@@ -22,8 +21,7 @@ function TravelFormContent({
     toggleInterest,
     setBudget,
     setDuration,
-    setTravelStyle,
-    setRegion,
+    toggleRegion,
     submit,
     isNavigating,
     submitError,
@@ -58,14 +56,10 @@ function TravelFormContent({
       </SectionCard>
 
       <SectionCard>
-        <TravelStyleSelector
-          value={preferences.travelStyle}
-          onChange={setTravelStyle}
+        <RegionSelector
+          selected={preferences.regions}
+          onToggle={toggleRegion}
         />
-      </SectionCard>
-
-      <SectionCard>
-        <RegionSelector value={preferences.region} onChange={setRegion} />
       </SectionCard>
 
       <div className="flex flex-col items-center gap-3 pt-4">

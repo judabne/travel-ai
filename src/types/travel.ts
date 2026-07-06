@@ -13,10 +13,7 @@ export type Interest =
   | "sports"
   | "cars";
 
-export type TravelStyle = "budget" | "balanced" | "comfort" | "luxury";
-
 export type Region =
-  | "any"
   | "europe"
   | "asia"
   | "americas"
@@ -27,8 +24,7 @@ export interface TravelPreferences {
   interests: Interest[];
   budget: number;
   duration: number;
-  travelStyle: TravelStyle;
-  region: Region;
+  regions: Region[];
 }
 
 export interface CountryScores {
@@ -57,7 +53,7 @@ export interface RecommendRequest {
   interests: Interest[];
   budget: number;
   duration: number;
-  region: Region;
+  regions: Region[];
 }
 
 export interface RecommendResponse {
