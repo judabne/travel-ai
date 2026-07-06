@@ -1,4 +1,9 @@
 import { fetchAiRecommendations } from "@/lib/server/aiClient";
+import {
+  buildLlmCacheKey,
+  getCachedLlmResult,
+  setCachedLlmResult,
+} from "@/lib/server/llmResultCache";
 import { mapAiResponseToRecommendResponse } from "@/lib/server/mapAiResults";
 import type { RecommendRequest, RecommendResponse } from "@/types/travel";
 
@@ -19,7 +24,16 @@ export function getTopInsight(results: RecommendResponse["results"]): string {
 export async function getRecommendations(
   preferences: RecommendRequest
 ): Promise<RecommendResponse> {
-  const aiResponse = await fetchAiRecommendations(preferences);
+  const cacheKey = buildLlmCacheKey(preferences);
+  const cachedAiResponse = getCachedLlmResult(cacheKey);
+
+  const aiResponse =
+    cachedAiResponse ?? (await fetchAiRecommendations(preferences));
+
+  if (!cachedAiResponse) {
+    setCachedLlmResult(cacheKey, aiResponse);
+  }
+
   const response = mapAiResponseToRecommendResponse(
     aiResponse,
     preferences.interests,
