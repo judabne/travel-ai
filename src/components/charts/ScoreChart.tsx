@@ -20,6 +20,11 @@ export function ScoreChart({
   onCountryClick,
 }: ScoreChartProps) {
   const { labels, values } = extractChartData(results, metric);
+  const getTooltipLabel =
+    metric === "budget"
+      ? (index: number) =>
+          `Estimated cost: $${results[index].estimatedCost.toLocaleString()}`
+      : undefined;
 
   return (
     <BaseChart
@@ -28,6 +33,7 @@ export function ScoreChart({
       values={values}
       onBarClick={onCountryClick}
       highlight={highlight}
+      getTooltipLabel={getTooltipLabel}
     />
   );
 }

@@ -43,7 +43,8 @@ export function buildBarChartData(
 
 export function buildChartOptions(
   title: string,
-  onBarClick?: (index: number) => void
+  onBarClick?: (index: number) => void,
+  getTooltipLabel?: (index: number) => string
 ): ChartOptions<"bar"> {
   return {
     responsive: true,
@@ -59,7 +60,13 @@ export function buildChartOptions(
       },
       tooltip: {
         callbacks: {
-          label: (context) => `Score: ${context.parsed.y}/100`,
+          label: (context) => {
+            const index = context.dataIndex;
+            if (getTooltipLabel && index >= 0) {
+              return getTooltipLabel(index);
+            }
+            return `Score: ${context.parsed.y}/100`;
+          },
         },
       },
     },
@@ -95,9 +102,10 @@ export function buildChartOptions(
 
 export function getPrimaryBarOptions(
   title: string,
-  onBarClick?: (index: number) => void
+  onBarClick?: (index: number) => void,
+  getTooltipLabel?: (index: number) => string
 ): ChartOptions<"bar"> {
-  const options = buildChartOptions(title, onBarClick);
+  const options = buildChartOptions(title, onBarClick, getTooltipLabel);
   if (options.plugins?.title) {
     options.plugins.title.color = PRIMARY_COLOR;
   }
