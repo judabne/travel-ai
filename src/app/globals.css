@@ -18,3 +18,118 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   overflow-x: clip;
 }
+
+@layer components {
+  .app-select-wrapper {
+    position: relative;
+  }
+
+  .app-select-actions {
+    position: absolute;
+    top: 0;
+    right: 0.75rem;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+    pointer-events: none;
+  }
+
+  .app-select-chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-shrink: 0;
+  }
+
+  .app-select-chevron::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #64748b;
+  }
+
+  .app-select {
+    width: 100%;
+    min-height: 2.75rem;
+    appearance: none;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+    background-color: #fff;
+    padding: 0.75rem 3rem 0.75rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: #0f172a;
+  }
+
+  .app-select:focus {
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(59 130 246 / 0.2);
+  }
+
+  .app-select--with-clear {
+    padding-right: 5.25rem;
+  }
+
+  .app-select-clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-size: 1.125rem;
+    line-height: 1;
+    color: #94a3b8;
+    cursor: pointer;
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
+
+  .app-select-clear:hover {
+    border-radius: 0.25rem;
+    background-color: #f1f5f9;
+    color: #475569;
+  }
+
+  @media (min-width: 640px) {
+    .app-select-actions {
+      gap: 0.5rem;
+    }
+
+    .app-select-chevron {
+      display: block;
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid #64748b;
+    }
+
+    .app-select-chevron::before {
+      content: none;
+    }
+
+    .app-select {
+      min-height: unset;
+      padding: 0.625rem 2.5rem 0.625rem 0.75rem;
+    }
+
+    .app-select--with-clear {
+      padding-right: 4rem;
+    }
+
+    .app-select-clear {
+      width: 1.25rem;
+      height: 1.25rem;
+      font-size: 0.875rem;
+    }
+  }
+}

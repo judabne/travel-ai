@@ -23,25 +23,50 @@ function CountrySelect({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const hasValue = value.length > 0;
+
   return (
     <div>
       <label htmlFor={id} className="mb-2 block text-sm font-medium text-slate-700">
         {label}{" "}
         <span className="font-normal text-slate-400">(optional)</span>
       </label>
-      <select
-        id={id}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-      >
-        <option value="">Select a country</option>
-        {COUNTRIES.map((country) => (
-          <option key={country} value={country}>
-            {country}
-          </option>
-        ))}
-      </select>
+      <div className="app-select-wrapper">
+        <select
+          id={id}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          className={`app-select ${hasValue ? "app-select--with-clear" : ""}`}
+        >
+          <option value="">Select a country</option>
+          {COUNTRIES.map((country) => (
+            <option key={country} value={country}>
+              {country}
+            </option>
+          ))}
+        </select>
+        <div className="app-select-actions">
+          {hasValue && (
+            <button
+              type="button"
+              onPointerDown={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+              }}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onChange("");
+              }}
+              aria-label={`Clear ${label.toLowerCase()}`}
+              className="app-select-clear"
+            >
+              ×
+            </button>
+          )}
+          <span className="app-select-chevron" aria-hidden="true" />
+        </div>
+      </div>
     </div>
   );
 }

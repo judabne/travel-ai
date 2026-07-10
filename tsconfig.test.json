@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/test/**/*.ts"
+  ],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "next/navigation": ["./src/test/mocks/next-navigation.ts"]
+    }
+  }
+}
