@@ -9,10 +9,10 @@ export function computeBudgetScore(
   const ratio = estimatedCost / budget;
 
   if (ratio <= 1.0) return 100;
-  if (ratio <= 1.05) return 90;
-  if (ratio <= 1.1) return 80;
-  if (ratio <= 1.2) return 60;
-  if (ratio <= 1.3) return 50;
+  if (ratio <= 1.1) return 90;
+  if (ratio <= 1.2) return 80;
+  if (ratio <= 1.3) return 60;
+  if (ratio <= 1.4) return 50;
   return 45;
 }
 
