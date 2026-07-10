@@ -1,6 +1,6 @@
 "use client";
 
-import { COUNTRIES } from "@/lib/countries";
+import { CountryCombobox } from "@/components/form/CountryCombobox";
 import { SectionCard } from "@/components/layout/SectionCard";
 
 interface TravelContextFieldsProps {
@@ -10,65 +10,6 @@ interface TravelContextFieldsProps {
   onCurrentCountryChange: (value: string) => void;
   onNationalityChange: (value: string) => void;
   onPrioritizeVisaFriendlyDestinationsChange: (value: boolean) => void;
-}
-
-function CountrySelect({
-  id,
-  label,
-  value,
-  onChange,
-}: {
-  id: string;
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-}) {
-  const hasValue = value.length > 0;
-
-  return (
-    <div>
-      <label htmlFor={id} className="mb-2 block text-sm font-medium text-slate-700">
-        {label}{" "}
-        <span className="font-normal text-slate-400">(optional)</span>
-      </label>
-      <div className="app-select-wrapper">
-        <select
-          id={id}
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-          className={`app-select ${hasValue ? "app-select--with-clear" : ""}`}
-        >
-          <option value="">Select a country</option>
-          {COUNTRIES.map((country) => (
-            <option key={country} value={country}>
-              {country}
-            </option>
-          ))}
-        </select>
-        <div className="app-select-actions">
-          {hasValue && (
-            <button
-              type="button"
-              onPointerDown={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-              }}
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                onChange("");
-              }}
-              aria-label={`Clear ${label.toLowerCase()}`}
-              className="app-select-clear"
-            >
-              ×
-            </button>
-          )}
-          <span className="app-select-chevron" aria-hidden="true" />
-        </div>
-      </div>
-    </div>
-  );
 }
 
 export function TravelContextFields({
@@ -82,7 +23,7 @@ export function TravelContextFields({
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <SectionCard>
-        <CountrySelect
+        <CountryCombobox
           id="current-country"
           label="Current country"
           value={currentCountry ?? ""}
@@ -91,7 +32,7 @@ export function TravelContextFields({
       </SectionCard>
 
       <SectionCard>
-        <CountrySelect
+        <CountryCombobox
           id="nationality"
           label="Nationality"
           value={nationality ?? ""}
