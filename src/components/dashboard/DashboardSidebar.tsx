@@ -4,6 +4,8 @@ import {
   formatBudget,
   formatDuration,
   formatInterests,
+  formatOptionalField,
+  formatPrioritizeVisaFriendlyDestinations,
   formatRegion,
 } from "@/lib/preferenceHelpers";
 import { InsightBox } from "@/components/dashboard/InsightBox";
@@ -49,6 +51,24 @@ export function DashboardSidebar({
             <dt className="text-slate-500">Regions</dt>
             <dd className="font-medium text-slate-900">
               {formatRegion(preferences, isEmpty)}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-slate-500">Current country</dt>
+            <dd className="font-medium text-slate-900">
+              {formatOptionalField(preferences.currentCountry, isEmpty)}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-slate-500">Nationality</dt>
+            <dd className="font-medium text-slate-900">
+              {formatOptionalField(preferences.nationality, isEmpty)}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-slate-500">Visa-friendly priority</dt>
+            <dd className="font-medium text-slate-900">
+              {formatPrioritizeVisaFriendlyDestinations(preferences, isEmpty)}
             </dd>
           </div>
         </dl>

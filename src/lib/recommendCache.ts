@@ -3,6 +3,8 @@ import {
   RESULTS_STORAGE_KEY,
   STORAGE_KEY,
 } from "@/lib/constants";
+import { optionalCountryFieldsEqual } from "@/lib/countryFieldHelpers";
+import { buildRecommendRequestKey } from "@/lib/recommendRequestKey";
 import {
   safeSessionStorageGet,
   safeSessionStorageSet,
@@ -12,12 +14,7 @@ import type { RecommendResponse, TravelPreferences } from "@/types/travel";
 export function getRecommendRequestKey(
   preferences: TravelPreferences
 ): string {
-  return JSON.stringify({
-    interests: [...preferences.interests].sort(),
-    budget: preferences.budget,
-    duration: preferences.duration,
-    regions: [...preferences.regions].sort(),
-  });
+  return buildRecommendRequestKey(preferences);
 }
 
 export function getStoredPreferences(): TravelPreferences | null {
@@ -59,7 +56,11 @@ export function arePreferencesEqual(
     leftInterests.every(
       (interest, index) => interest === rightInterests[index]
     ) &&
-    leftRegions.every((region, index) => region === rightRegions[index])
+    leftRegions.every((region, index) => region === rightRegions[index]) &&
+    optionalCountryFieldsEqual(left.currentCountry, right.currentCountry) &&
+    optionalCountryFieldsEqual(left.nationality, right.nationality) &&
+    Boolean(left.prioritizeVisaFriendlyDestinations) ===
+      Boolean(right.prioritizeVisaFriendlyDestinations)
   );
 }
 

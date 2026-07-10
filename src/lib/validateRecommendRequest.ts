@@ -7,10 +7,35 @@ import {
   MAX_SELECTED_INTERESTS,
   REGIONS,
 } from "@/lib/constants";
+import { VALID_COUNTRIES } from "@/lib/countries";
 import type { Interest, RecommendRequest, Region } from "@/types/travel";
 
 const VALID_INTERESTS = new Set<Interest>(INTERESTS.map((item) => item.id));
 const VALID_REGIONS = new Set<Region>(REGIONS.map((item) => item.id));
+
+function parseOptionalCountryField(
+  value: unknown
+): string | undefined | null {
+  if (value === undefined || value === null || value === "") {
+    return undefined;
+  }
+
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    return undefined;
+  }
+
+  if (!VALID_COUNTRIES.has(trimmed)) {
+    return null;
+  }
+
+  return trimmed;
+}
 
 export function parseRecommendRequest(body: unknown): RecommendRequest | null {
   if (!body || typeof body !== "object") {
@@ -67,10 +92,44 @@ export function parseRecommendRequest(body: unknown): RecommendRequest | null {
     return null;
   }
 
-  return {
+  const currentCountry = parseOptionalCountryField(request.currentCountry);
+  if (currentCountry === null) {
+    return null;
+  }
+
+  const nationality = parseOptionalCountryField(request.nationality);
+  if (nationality === null) {
+    return null;
+  }
+
+  const parsed: RecommendRequest = {
     interests: request.interests,
     budget: request.budget,
     duration: request.duration,
     regions: request.regions,
   };
+
+  if (currentCountry) {
+    parsed.currentCountry = currentCountry;
+  }
+
+  if (nationality) {
+    parsed.nationality = nationality;
+  }
+
+  if (request.prioritizeVisaFriendlyDestinations !== undefined) {
+    if (typeof request.prioritizeVisaFriendlyDestinations !== "boolean") {
+      return null;
+    }
+
+    if (request.prioritizeVisaFriendlyDestinations) {
+      if (!nationality) {
+        return null;
+      }
+
+      parsed.prioritizeVisaFriendlyDestinations = true;
+    }
+  }
+
+  return parsed;
 }

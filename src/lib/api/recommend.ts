@@ -22,6 +22,15 @@ export async function fetchRecommendations(
         budget: preferences.budget,
         duration: preferences.duration,
         regions: preferences.regions,
+        ...(preferences.currentCountry
+          ? { currentCountry: preferences.currentCountry }
+          : {}),
+        ...(preferences.nationality
+          ? { nationality: preferences.nationality }
+          : {}),
+        ...(preferences.prioritizeVisaFriendlyDestinations
+          ? { prioritizeVisaFriendlyDestinations: true }
+          : {}),
       }),
     });
 

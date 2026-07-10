@@ -3,7 +3,7 @@ import { SectionCard } from "@/components/layout/SectionCard";
 
 export function TravelFormSkeleton() {
   return (
-    <div className="space-y-8" aria-busy="true" aria-label="Loading form">
+    <div className="space-y-4 md:space-y-8" aria-busy="true" aria-label="Loading form">
       <SectionCard title="Interests">
         <div className="space-y-4">
           <div className="flex flex-wrap gap-3">

@@ -5,6 +5,7 @@ import { BudgetSlider } from "@/components/form/BudgetSlider";
 import { DurationSelector } from "@/components/form/DurationSelector";
 import { InterestSelector } from "@/components/form/InterestSelector";
 import { RegionSelector } from "@/components/form/RegionSelector";
+import { TravelContextFields } from "@/components/form/TravelContextFields";
 import { TravelFormSkeleton } from "@/components/form/TravelFormSkeleton";
 import { DEFAULT_PREFERENCES } from "@/lib/constants";
 import { getRecommendRequestKey } from "@/lib/recommendCache";
@@ -22,6 +23,9 @@ function TravelFormContent({
     setBudget,
     setDuration,
     toggleRegion,
+    setCurrentCountry,
+    setNationality,
+    setPrioritizeVisaFriendlyDestinations,
     submit,
     isNavigating,
     submitError,
@@ -35,7 +39,7 @@ function TravelFormContent({
         event.preventDefault();
         submit();
       }}
-      className="space-y-8"
+      className="space-y-4 md:space-y-8"
     >
       <SectionCard title="Interests">
         <InterestSelector
@@ -61,6 +65,19 @@ function TravelFormContent({
           onToggle={toggleRegion}
         />
       </SectionCard>
+
+      <TravelContextFields
+        currentCountry={preferences.currentCountry}
+        nationality={preferences.nationality}
+        prioritizeVisaFriendlyDestinations={
+          preferences.prioritizeVisaFriendlyDestinations
+        }
+        onCurrentCountryChange={setCurrentCountry}
+        onNationalityChange={setNationality}
+        onPrioritizeVisaFriendlyDestinationsChange={
+          setPrioritizeVisaFriendlyDestinations
+        }
+      />
 
       <div className="flex flex-col items-center gap-3 pt-4">
         {submitError && (

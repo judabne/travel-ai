@@ -2,6 +2,7 @@ import "server-only";
 
 import { createHash } from "node:crypto";
 
+import { buildRecommendRequestPayload } from "@/lib/recommendRequestKey";
 import type { AiRecommendResponse } from "@/types/ai";
 import type { RecommendRequest } from "@/types/travel";
 
@@ -15,17 +16,8 @@ interface CacheEntry {
 
 const cache = new Map<string, CacheEntry>();
 
-function normalizeRequest(request: RecommendRequest) {
-  return {
-    interests: [...request.interests].sort(),
-    budget: request.budget,
-    duration: request.duration,
-    regions: [...request.regions].sort(),
-  };
-}
-
 export function buildLlmCacheKey(request: RecommendRequest): string {
-  const payload = JSON.stringify(normalizeRequest(request));
+  const payload = JSON.stringify(buildRecommendRequestPayload(request));
 
   return createHash("sha256").update(payload).digest("hex");
 }
