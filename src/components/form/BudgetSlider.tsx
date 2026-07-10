@@ -11,7 +11,7 @@ export function BudgetSlider({ value, onChange }: BudgetSliderProps) {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <span className="text-sm font-medium text-slate-700">Total budget</span>
+        <span className="text-sm font-medium text-slate-700">Stay budget</span>
         <span className="text-lg font-semibold text-blue-600">
           ${value.toLocaleString()}
         </span>

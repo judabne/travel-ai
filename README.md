@@ -34,21 +34,37 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scoring
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Recommendations come from the LLM; final scores are computed on the server.
 
-## Learn More
+### LLM
+- Picks 4 destinations and returns per country: `summary`, `estimatedCost`, `visitorSatisfactionScore`, `infrastructureScore`, and `interestMatch` scores
+- Writes the top-level `insight`
+- `infrastructureScore` is general by default; if **current country** is set, it reflects ease of travel from that country
+- If **prioritize visa-friendly destinations** is checked (with nationality), selection favors easier-visa countries
 
-To learn more about Next.js, take a look at the following resources:
+### Server
+- **Budget** — from `estimatedCost` vs stay budget
+- **Interest** — average of the LLM’s `interestMatch` scores
+- **Visa** — looked up locally from passport-index data (not the LLM), scored at request time using trip duration
+  - No nationality → average visa score per destination for the selected duration (no visa guidance text)
+  - Nationality set → nationality × destination lookup; visa-free day allowances score 100 only when allowed days ≥ trip duration
+- **Travel ease** — `visa × 0.6 + infrastructure × 0.4`
+- **Overall** — `budget × 0.25 + interest × 0.35 + travel ease × 0.25 + visitor satisfaction × 0.15`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Visa data
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Visa scores read from `src/lib/server/data/visaPairLookup.json` — a static snapshot of passport-index requirements, not the LLM. That keeps scoring factual and fast without an external API on every request.
 
-## Deploy on Vercel
+To refresh the data after policy changes, download [passport-index-tidy.csv](https://github.com/ilyankou/passport-index-dataset/blob/master/passport-index-tidy.csv) and run:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+node scripts/generateVisaData.mjs path/to/passport-index-tidy.csv
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Commit the updated `visaPairLookup.json`. The script is build-time only; production never runs it.
+
+## To do next
+
+- Factor travel costs (flights, trains, etc.) into the stay budget when scoring and recommending destinations

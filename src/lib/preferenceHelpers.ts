@@ -50,3 +50,25 @@ export function formatRegion(
     )
     .join(", ");
 }
+
+export function formatOptionalField(
+  value: string | undefined,
+  isEmpty = false
+): string {
+  if (isEmpty || !value) {
+    return "—";
+  }
+
+  return value;
+}
+
+export function formatPrioritizeVisaFriendlyDestinations(
+  preferences: TravelPreferences,
+  isEmpty = false
+): string {
+  if (isEmpty || !preferences.nationality) {
+    return "—";
+  }
+
+  return preferences.prioritizeVisaFriendlyDestinations ? "Yes" : "No";
+}

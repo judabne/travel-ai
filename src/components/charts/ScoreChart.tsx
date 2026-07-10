@@ -26,7 +26,11 @@ export function ScoreChart({
           `Estimated cost: $${results[index].estimatedCost.toLocaleString()}`
       : metric === "overall"
         ? (index: number) => results[index].summary
-        : undefined;
+        : metric === "travelEase"
+          ? (index: number) =>
+              results[index].visaRequirements ??
+              `Score: ${results[index].scores.travelEase}/100`
+          : undefined;
 
   return (
     <BaseChart

@@ -25,6 +25,9 @@ export interface TravelPreferences {
   budget: number;
   duration: number;
   regions: Region[];
+  currentCountry?: string;
+  nationality?: string;
+  prioritizeVisaFriendlyDestinations?: boolean;
 }
 
 export interface CountryScores {
@@ -47,6 +50,7 @@ export interface CountryResult {
   summary: string;
   estimatedCost: number;
   interestMatch: InterestMatch[];
+  visaRequirements?: string;
 }
 
 export interface RecommendRequest {
@@ -54,6 +58,9 @@ export interface RecommendRequest {
   budget: number;
   duration: number;
   regions: Region[];
+  currentCountry?: string;
+  nationality?: string;
+  prioritizeVisaFriendlyDestinations?: boolean;
 }
 
 export interface RecommendResponse {

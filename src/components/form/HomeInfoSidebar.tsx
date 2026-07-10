@@ -2,6 +2,7 @@ import { SectionCard } from "@/components/layout/SectionCard";
 
 const HOW_IT_WORKS = [
   "Enter interests and preferences",
+  "Optionally add location and nationality for travel ease and visa fit",
   "We score destinations",
   "Compare countries across different dimensions",
 ];

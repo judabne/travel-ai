@@ -76,7 +76,6 @@ function parseAiCountry(
     typeof country.estimatedCost !== "number" ||
     !Number.isFinite(country.estimatedCost) ||
     !isValidScore(country.visitorSatisfactionScore) ||
-    !isValidScore(country.visaScore) ||
     !isValidScore(country.infrastructureScore)
   ) {
     return null;
@@ -93,7 +92,6 @@ function parseAiCountry(
     summary: country.summary,
     estimatedCost: country.estimatedCost,
     visitorSatisfactionScore: country.visitorSatisfactionScore,
-    visaScore: country.visaScore,
     infrastructureScore: country.infrastructureScore,
     interestMatch,
   };

@@ -7,9 +7,7 @@ import {
 import { mapAiResponseToRecommendResponse } from "@/lib/server/mapAiResults";
 import type { RecommendRequest, RecommendResponse } from "@/types/travel";
 
-export type { RecommendRequest, RecommendResponse };
-
-export function getTopInsight(results: RecommendResponse["results"]): string {
+function getTopInsight(results: RecommendResponse["results"]): string {
   if (results.length === 0) {
     return "No matches found. Try adjusting your filters.";
   }
@@ -37,7 +35,9 @@ export async function getRecommendations(
   const response = mapAiResponseToRecommendResponse(
     aiResponse,
     preferences.interests,
-    preferences.budget
+    preferences.budget,
+    preferences.duration,
+    preferences.nationality
   );
 
   if (!aiResponse.insight.trim()) {

@@ -63,21 +63,24 @@ export function CountryDrawer({ country, isOpen, onClose }: CountryDrawerProps) 
             </div>
             <ul className="space-y-3">
               {scoreItems.map(({ label, value }) => (
-                <li
-                  key={label}
-                  className="flex items-center justify-between text-sm"
-                >
-                  <span className="text-slate-600">{label}</span>
-                  <span
-                    className="font-semibold"
-                    style={{ color: getScoreColor(value) }}
-                  >
-                    {value}/100
-                  </span>
+                <li key={label}>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-slate-600">{label}</span>
+                    <span
+                      className="font-semibold"
+                      style={{ color: getScoreColor(value) }}
+                    >
+                      {value}/100
+                    </span>
+                  </div>
                 </li>
               ))}
             </ul>
           </section>
+
+          <p className="mb-8 text-xs text-slate-400">
+            Estimated trip cost: ${country.estimatedCost.toLocaleString()}
+          </p>
 
           <section className="mb-8">
             <h3 className="mb-3 text-base font-semibold uppercase tracking-wide text-slate-500">
@@ -88,9 +91,16 @@ export function CountryDrawer({ country, isOpen, onClose }: CountryDrawerProps) 
             </p>
           </section>
 
-          <p className="text-xs text-slate-400">
-            Estimated trip cost: ${country.estimatedCost.toLocaleString()}
-          </p>
+          {country.visaRequirements && (
+            <section>
+              <h3 className="mb-3 text-base font-semibold uppercase tracking-wide text-slate-500">
+                Visa Requirements
+              </h3>
+              <p className="text-sm leading-relaxed text-slate-700">
+                {country.visaRequirements}
+              </p>
+            </section>
+          )}
         </div>
 
         <div className="border-t border-slate-200 px-6 py-5 md:hidden">

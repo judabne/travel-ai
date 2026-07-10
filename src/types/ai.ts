@@ -11,7 +11,6 @@ export interface AiCountryRecommendation {
   summary: string;
   estimatedCost: number;
   visitorSatisfactionScore: number;
-  visaScore: number;
   infrastructureScore: number;
   interestMatch: AiInterestMatch[];
 }

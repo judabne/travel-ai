@@ -8,10 +8,11 @@ Given a user's trip preferences, return destination recommendations.
 
 ## User preferences
 - Interests: {{interests}}
-- Trip budget: $\{{budget}} USD (total for the entire duration, not per day)
+- Stay budget: $\{{budget}} USD (for the entire duration, not per day)
 - Trip duration: {{duration}} days
 - Preferred region: {{region}}
 {{regionGuidance}}
+{{travelContext}}
 
 ---
 
@@ -20,8 +21,10 @@ Given a user's trip preferences, return destination recommendations.
 - Return exactly 4 countries (no more, no fewer); order does not matter
 - interestMatch must only contain the user's selected interests; use interest ids and score each 0–100 by how strongly the destination is known for it
 - Score visitorSatisfactionScore 0–100 by how satisfied typical visitors are with the destination overall; do not factor visa, infrastructure, budget, or interest scores into it
+{{infrastructureScoreGuidance}}
+{{visaSelectionGuidance}}
 - All scores must be integers from 0 to 100; higher scores mean stronger match quality
-- Countries must match interests, region, and realistic affordability for a {{duration}}-day trip near a {{budget}} total budget
+- Countries must match interests, region, and realistic affordability for a {{duration}}-day trip near a {{budget}} stay budget
 - estimatedCost must be the realistic total for that destination and duration—not adjusted to match the budget
 - If the budget is tight, prefer value destinations; if generous, include premium ones—the selection should change when budget changes significantly
 - If possible, all 4 should have estimatedCost at or below {{budget}}; otherwise at least 3 of 4 at or below {{budgetCeiling}}
@@ -44,7 +47,6 @@ Given a user's trip preferences, return destination recommendations.
       "summary": "string",
       "estimatedCost": number,
       "visitorSatisfactionScore": number,
-      "visaScore": number,
       "infrastructureScore": number,
       "interestMatch": [
         {
@@ -73,7 +75,7 @@ function isGlobalRegionSelection(regions: Region[]): boolean {
   return REGIONS.every((region) => selected.has(region.id));
 }
 
-export function formatRegionsForPrompt(regions: Region[]): string {
+function formatRegionsForPrompt(regions: Region[]): string {
   if (isGlobalRegionSelection(regions)) {
     return "any";
   }
@@ -95,6 +97,44 @@ function formatRegionGuidance(regions: Region[]): string {
   return "  - Only include countries in one of the specified regions";
 }
 
+function formatTravelContext(request: RecommendRequest): string {
+  const lines: string[] = [];
+
+  if (request.currentCountry) {
+    lines.push(`- Current country: ${request.currentCountry}`);
+  }
+
+  if (request.nationality) {
+    lines.push(`- Nationality: ${request.nationality}`);
+  }
+
+  if (request.prioritizeVisaFriendlyDestinations && request.nationality) {
+    lines.push("- Prioritize visa-friendly destinations: yes");
+  }
+
+  if (lines.length === 0) {
+    return "";
+  }
+
+  return lines.map((line) => `  ${line}`).join("\n");
+}
+
+function formatInfrastructureScoreGuidance(request: RecommendRequest): string {
+  if (request.currentCountry) {
+    return `- Score infrastructureScore 0–100 for how easy it is to travel from ${request.currentCountry} to each destination (reachable by train, reachable by car, direct flights, travel time, connections, and getting there)`;
+  }
+
+  return "- Score infrastructureScore 0–100 for each destination's general travel infrastructure and connectivity in general";
+}
+
+function formatVisaSelectionGuidance(request: RecommendRequest): string {
+  if (!request.prioritizeVisaFriendlyDestinations || !request.nationality) {
+    return "";
+  }
+
+  return `- When selecting the 4 countries, favor destinations where nationals of ${request.nationality} can enter visa-free or with minimal visa friction`;
+}
+
 export function buildRecommendPrompt(request: RecommendRequest): string {
   const budgetCeiling = Math.round(request.budget * 1.15);
 
@@ -106,5 +146,11 @@ export function buildRecommendPrompt(request: RecommendRequest): string {
     .replace("{{budgetCeiling}}", String(budgetCeiling))
     .replace("{{duration}}", String(request.duration))
     .replace("{{region}}", formatRegionsForPrompt(request.regions))
-    .replace("{{regionGuidance}}", formatRegionGuidance(request.regions));
+    .replace("{{regionGuidance}}", formatRegionGuidance(request.regions))
+    .replace("{{travelContext}}", formatTravelContext(request))
+    .replace(
+      "{{infrastructureScoreGuidance}}",
+      formatInfrastructureScoreGuidance(request)
+    )
+    .replace("{{visaSelectionGuidance}}", formatVisaSelectionGuidance(request));
 }

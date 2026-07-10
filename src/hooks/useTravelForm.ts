@@ -157,6 +157,34 @@ export function useTravelForm(initialPreferences: TravelPreferences) {
     });
   }, []);
 
+  const setCurrentCountry = useCallback((currentCountry: string) => {
+    setPreferences((prev) => ({
+      ...prev,
+      currentCountry: currentCountry.trim() || undefined,
+    }));
+  }, []);
+
+  const setNationality = useCallback((nationality: string) => {
+    setPreferences((prev) => {
+      const nextNationality = nationality.trim() || undefined;
+
+      return {
+        ...prev,
+        nationality: nextNationality,
+        prioritizeVisaFriendlyDestinations: nextNationality
+          ? prev.prioritizeVisaFriendlyDestinations
+          : undefined,
+      };
+    });
+  }, []);
+
+  const setPrioritizeVisaFriendlyDestinations = useCallback((enabled: boolean) => {
+    setPreferences((prev) => ({
+      ...prev,
+      prioritizeVisaFriendlyDestinations: enabled || undefined,
+    }));
+  }, []);
+
   const submit = useCallback(() => {
     if (preferences.interests.length === 0 || isNavigating) {
       return;
@@ -186,6 +214,9 @@ export function useTravelForm(initialPreferences: TravelPreferences) {
     setBudget,
     setDuration,
     toggleRegion,
+    setCurrentCountry,
+    setNationality,
+    setPrioritizeVisaFriendlyDestinations,
     submit,
     isNavigating,
     submitError,
