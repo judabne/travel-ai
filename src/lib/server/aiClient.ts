@@ -8,7 +8,7 @@ import { parseAiRecommendResponse } from "@/lib/server/parseAiResponse";
 import type { AiRecommendResponse } from "@/types/ai";
 import type { RecommendRequest } from "@/types/travel";
 
-const DEFAULT_MODEL = "gpt-4.1-nano";
+const DEFAULT_MODEL = "gpt-6-luna";
 
 function getOpenAiClient(): OpenAI {
   const apiKey = process.env.OPENAI_API_KEY;
